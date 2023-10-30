@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import { useState } from 'react';
+import Join from './components/join/Join';
+import GyoujiList from './components/gyouji/GyoujiList';
+import Exercise from './components/exercise/Exercise';
+import Newspaper from './components/newspaper/Newspaper';
+import GyoujiInput from './components/gyouji/GyoujiInput';
+import Sidebar from './components/side/Sidebar';
+import { SidebarData } from './components/side/SidebarData';
 
 function App() {
+  const [page, setPage] = useState(0);
+
+  console.log("page="+ page);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Sidebar setPage={setPage}/>
+
+      {SidebarData.map((value)=> {
+        console.log("page="+page + "link="+value.link);
+        if (page === value.pageID) {
+          console.log("===");
+          return <div className='main'>{value.link}</div>;
+        }
+      })}
     </div>
   );
 }

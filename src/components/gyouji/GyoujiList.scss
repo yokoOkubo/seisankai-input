@@ -1,0 +1,11 @@
+.gyoujiList {
+  margin: 0 auto;
+  width: 800px;
+  padding: 10px;
+  
+  .gyojiTable, th, td {
+    border: 1px solid black;
+    background-color: beige;
+    padding: 10px;
+  }
+}
