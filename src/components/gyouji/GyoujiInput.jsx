@@ -10,19 +10,15 @@ const GyoujiInput = () => {
   const [contents, setContents] = useState('');
 
   const inputData =  async() => {
-    alert('inputData0');
     try {
-      alert("inputData")
       const docData = {
         title1: title1,
         title2: title2,
         contents: contents,
       };
       const docRef = await addDoc(collection(db, 'gyouji'), docData);
-      alert(docRef.id);
-
+      console.log(docRef.id);
     } catch (err) {
-      alert(err);
       console.log(err);
     }
   };

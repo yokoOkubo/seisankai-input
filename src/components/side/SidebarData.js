@@ -5,8 +5,8 @@ import ViewListIcon from '@mui/icons-material/ViewList';
 import GyoujiInput from '../gyouji/GyoujiInput';
 import GyoujiList from '../gyouji/GyoujiList';
 import Exercise from '../exercise/Exercise';
-import Newspaper from '../newspaper/Newspaper';
 import Join from '../join/Join';
+import NewspaperInput from '../newspaper/NewspaperInput';
 
 export const SidebarData = [
   {
@@ -40,9 +40,9 @@ export const SidebarData = [
     link: <Exercise />,
   },
   {
-    title: '西三会だより',
+    title: '西三会だより新規作成',
     icon: <NoteAddIcon />,
     pageID: 30,
-    link: <Newspaper />,
+    link: <NewspaperInput />,
   },
 ];

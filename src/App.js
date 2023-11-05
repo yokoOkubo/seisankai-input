@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Join from './components/join/Join';
 import GyoujiList from './components/gyouji/GyoujiList';
 import Exercise from './components/exercise/Exercise';
-import Newspaper from './components/newspaper/Newspaper';
+import NewspaperInput from './components/newspaper/NewspaperInput';
 import GyoujiInput from './components/gyouji/GyoujiInput';
 import Sidebar from './components/side/Sidebar';
 import { SidebarData } from './components/side/SidebarData';
@@ -24,6 +24,7 @@ function App() {
         }
       })}
     </div>
+  
   );
 }
 
