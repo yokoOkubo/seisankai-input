@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './GyoujiList.scss';
-import { collection, deleteDoc, doc, onSnapshot, setDoc } from 'firebase/firestore';
-import db from '../../firebase';
+import { collection, deleteDoc, doc, onSnapshot, orderBy, query, setDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
 import Button from '@mui/material/Button';
 import GyoujiUpdate from './GyoujiUpdate';
 
@@ -11,7 +11,8 @@ const GyoujiList = () => {
   const [gyoujiForUpdate, setGyoujiForUpdate] = useState();
 
   useEffect(()=>{
-    const events =collection(db, "gyouji");
+    const ref =collection(db, "gyouji");
+    const events = query(ref,orderBy("day"));
     onSnapshot(events,(snapshot)=> {
       setGyouji(snapshot.docs.map((doc)=>{
         return {
@@ -51,8 +52,8 @@ if (toUpdateFlg === false) {
         {gyoujis.map((gyouji) => (
 
             <tr key={gyouji.id}>
-            <td>{gyouji.title2}</td>
             <td>{gyouji.title1}</td>
+            <td>{gyouji.title2}</td>
             <td>{gyouji.contents.substr(0, 10) + '...'}</td>
             <td>
             <Button

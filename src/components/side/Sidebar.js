@@ -1,11 +1,13 @@
 import React from 'react'
 import './Sidebar.scss'
 import {SidebarData} from './SidebarData.js'
+import Login from './Login.js';
 
 const Sidebar = (props) => {
   const {setPage} = props;
   return (
     <div className="sidebar">
+      <Login />
       <ul className="sidebarlist">
         {SidebarData.map((value, key) => {
           return (

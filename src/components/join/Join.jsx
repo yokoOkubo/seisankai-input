@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import "./Join.scss"
 import { collection, onSnapshot } from 'firebase/firestore';
-import db from '../../firebase';
+import { db } from '../../firebase';
 
 const Join = () => {
   const [joins, setJoins] = useState([]);

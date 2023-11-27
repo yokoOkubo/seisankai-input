@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import "./NewspaperInput.scss"
 import { Button } from '@mui/base';
 import { addDoc, collection } from 'firebase/firestore';
-import db from '../../firebase';
+import { db } from '../../firebase';
 
 const NewspaperInput = () => {
   const [title, setTitle] = useState([]);

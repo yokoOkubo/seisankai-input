@@ -16,11 +16,13 @@ function App() {
     <div className="App">
       <Sidebar setPage={setPage}/>
 
-      {SidebarData.map((value)=> {
+      
+
+      {SidebarData.map((value, index)=> {
         console.log("page="+page + "link="+value.link);
         if (page === value.pageID) {
           console.log("===");
-          return <div className='main'>{value.link}</div>;
+          return <div key={index} className='main'>{value.link}</div>;
         }
       })}
     </div>

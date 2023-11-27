@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button } from '@mui/material';
 import './GyoujiUpdate.scss'
 import { doc, setDoc } from 'firebase/firestore';
-import db from '../../firebase';
+import { db } from '../../firebase';
 
 const GyoujiUpdate = (props) => {
   const { gyouji, setToUpdateFlg } = props;
