@@ -3,15 +3,18 @@ import { db } from '../../firebase';
 import { Button } from '@mui/material';
 import { addDoc, collection} from 'firebase/firestore';
 import "./GyoujiInput.scss"
-// import DateFnsUtils from '@date-io/date-fns';
-// import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import  DatePicker from '@mui/lab/DatePicker';
+// import  DatePicker from '@mui/lab/DatePicker';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Dayjs } from 'dayjs';
 
 const GyoujiInput = () => {
   const [title1, setTitle1] = useState("");
   const [title2, setTitle2] = useState('');
   const [contents, setContents] = useState('');
-  const [day2, setDay2] = useState(new Date());
+  const [day1, setDay1] = useState(null);
+  const [day2, setDay2] = useState(null);
 
   const inputData =  async() => {
     try {
@@ -27,14 +30,14 @@ const GyoujiInput = () => {
     }
   };
   const cancelInput = ()=> {
-
+    alert(day1);
   }
   return (
     <div className="gyoujiInput">
       <h2>新しく作成する行事を入力してください</h2>
       <form>
         <div>
-          日付a
+          行事が行われる日付
           <br />
           <input
             className="title1"
@@ -45,13 +48,30 @@ const GyoujiInput = () => {
         </div>
 
         <div>
-          日付2
+          行事が行われる日付
           <br />
-          <DatePicker
-            label="Controlled picker"
-            value={day2}
-            onChange={(newValue) => setDay2(newValue)}
-          />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            
+              <DatePicker
+                label=""
+                value={day1}
+                onChange={(newValue) => setDay1(newValue)}
+              />
+            
+          </LocalizationProvider>
+        </div>
+
+        <div>
+          1日で終わらない場合には最終日
+          <br />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            
+              <DatePicker
+                value={day2}
+                onChange={(newValue) => setDay2(newValue)}
+              />
+            
+          </LocalizationProvider>
         </div>
 
         <div>
