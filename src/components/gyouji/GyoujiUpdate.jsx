@@ -28,7 +28,7 @@ const GyoujiUpdate = (props) => {
   return (
     <div className="gyoujiUpdate">
       <h2>変更したい部分を変更してください</h2>
-      <form>
+      {/* <form>
         <div>
           日付
           <br />
@@ -66,7 +66,7 @@ const GyoujiUpdate = (props) => {
             キャンセル
           </Button>
         </div>
-      </form>
+      </form> */}
     </div>
   );
 
