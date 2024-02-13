@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import './GyoujiList.scss';
-import { collection, deleteDoc, doc, onSnapshot, orderBy, query, setDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '../../firebase';
 import Button from '@mui/material/Button';
-import GyoujiUpdate from './GyoujiUpdate';
+import { useNavigate } from 'react-router-dom';
 
 const GyoujiList = () => {
-  const [gyoujis,setGyouji] = useState([]);
-  const [toUpdateFlg, setToUpdateFlg] = useState(false);
-  const [gyoujiForUpdate, setGyoujiForUpdate] = useState();
+  const [gyoujis,setGyoujis] = useState([]);
+  const navigate = useNavigate();
 
+  //---最初gyoujiコレクションのデータを
   useEffect(()=>{
     const ref =collection(db, "gyouji");
-    const events = query(ref,orderBy("day"));
+    const events = query(ref,orderBy("day1"));
     onSnapshot(events,(snapshot)=> {
-      setGyouji(snapshot.docs.map((doc)=>{
+      setGyoujis(snapshot.docs.map((doc)=>{
+        console.log(doc.data().day1);
         return {
           id: doc.id,
           ...doc.data(),
@@ -22,18 +23,39 @@ const GyoujiList = () => {
       }));
     });
   },[]);
-
+  
+  //---各ドキュメントの削除ボタンを押した時の処理
   const deleteGyouji = async (id) => {
-    alert(id);
     await deleteDoc(doc(db, 'gyouji', id));
   }
-
-  const updateGyouji = (gyouji) => {
-    setToUpdateFlg(true);
-    setGyoujiForUpdate(gyouji);
+  
+  //---各ドキュメントの変更ボタンを押した時の処理
+  const updateGyouji = (id) => {
+    navigate("/gyoujiUpdate/" + id);
   };
 
-if (toUpdateFlg === false) {
+  //---DBのday1,day2を受け取りそれを表示するための文字列にする
+  const toDisplayDateString = (day1,day2) => {
+    let str1 = toDateString(day1);
+    let str2 = toDateString(day2);
+    
+    if (str1 == "") return "";
+    if (str2 == "") return str1;
+    return str1 + " - " + str2;
+  }
+  //---DBのtimestring型をDateに変換しx年x月x日の文字列にする
+  const toDateString = (day) => {
+    console.log("day=",day);
+    let str = "";
+    if (day) {
+      const date = new Date(day.toDate());
+      str = date.getFullYear() + "年" +
+        (date.getMonth() + 1) + "月" +
+        date.getDate() + "日"
+    }
+    return str;
+  }
+
   return (
     <div className="gyoujiList">
       <table className="gayoujiTable">
@@ -51,40 +73,31 @@ if (toUpdateFlg === false) {
         <tbody>
         {gyoujis.map((gyouji) => (
 
-            <tr key={gyouji.id}>
-            <td>{gyouji.title1}</td>
-            <td>{gyouji.title2}</td>
+          <tr key={gyouji.id}>
+            <td>{toDisplayDateString(gyouji.day1,gyouji.day2)}</td>
+            <td>{gyouji.title}</td>
             <td>{gyouji.contents.substr(0, 10) + '...'}</td>
             <td>
-            <Button
-            variant="contained"
-            onClick={() => deleteGyouji(gyouji.id)}
-            >
-            削除
-            </Button>
+              <Button
+                variant="contained"
+                onClick={() => deleteGyouji(gyouji.id)}
+              >
+                削除
+              </Button>
             </td>
             <td>
-            <Button
-            variant="contained"
-            onClick={() => updateGyouji(gyouji)}
-            >
-            変更
-            </Button>
+              <Button
+                variant="contained"
+                onClick={() => updateGyouji(gyouji.id)}
+              >
+                変更
+              </Button>
             </td>
-            </tr>
+        </tr>
         ))}
         </tbody>
         </table>
       </div>
       )
-    } else
-     {
-      return (
-        <GyoujiUpdate
-          gyouji={gyoujiForUpdate}
-          setToUpdateFlg={setToUpdateFlg}
-        />
-      );
-    }
 }
 export default GyoujiList

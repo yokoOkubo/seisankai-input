@@ -8,8 +8,16 @@ import GyoujiList from '../gyouji/GyoujiList';
 import Exercise from '../exercise/Exercise';
 import Join from '../join/Join';
 import NewspaperInput from '../newspaper/NewspaperInput';
+import Gyouji from '../gyouji/Gyouji';
 
 export const SidebarData = [
+  {
+    title: '町会行事のページ',
+    icon: <ViewListIcon />,
+    pageID: 0,
+    link: <Gyouji />,
+    display: true,
+  },
   {
     title: '町会行事一覧',
     icon: <ViewListIcon />,
