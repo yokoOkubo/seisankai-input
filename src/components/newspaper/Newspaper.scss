@@ -1,0 +1,19 @@
+.newspaper {
+  margin: 0 auto;
+  width: 800px;
+  height:100vh;
+
+  
+  .titles {
+    margin: 10px;
+    background-color: beige;
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+
+    .one {
+      margin: 0 auto;
+      width: 700px;
+    }
+  }
+}

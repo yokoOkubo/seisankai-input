@@ -3,10 +3,12 @@ import "./NewspaperInput.scss"
 import { Button } from '@mui/base';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../../firebase';
+import { useNavigate } from 'react-router-dom';
 
 const NewspaperInput = () => {
   const [title, setTitle] = useState([]);
   const [url, setUrl] = useState([]);
+  const navigate = useNavigate();
  
   const inputData = async()=> {
     try {
@@ -15,6 +17,7 @@ const NewspaperInput = () => {
         url: url
       }
       await addDoc(collection(db,"dayori"), docData);
+      navigate("/newspaperList");
     } catch(err) {
       console.log(err);
     }
@@ -24,7 +27,7 @@ const NewspaperInput = () => {
       <h2>新しくGoogle Driveに保存した西三会だよりの情報を入力してください</h2>
       <form>
         <div>
-          タイトル（yyyy年m月）
+          年月をyyyymmの形式で（たとえば2024年2月なら202402として入力）
           <br />
           <input
             className="title"

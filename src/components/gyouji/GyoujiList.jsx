@@ -58,7 +58,7 @@ const GyoujiList = () => {
 
   return (
     <div className="gyoujiList">
-      <table className="gayoujiTable">
+      <table className="gyoujiTable">
         <caption><h2>町内会行事一覧</h2></caption>
         <thead>
         <tr>

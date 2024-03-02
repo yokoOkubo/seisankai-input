@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import "./Join.scss"
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '../../firebase';
 
 const Join = () => {
@@ -8,7 +8,8 @@ const Join = () => {
 
   
   useEffect(() => {
-    const joins = collection(db, 'join_us');
+    const ref = collection(db, 'join_us');
+    const joins = query(ref, orderBy("created"));
     onSnapshot(joins, (snapshot) => {
       setJoins(
         snapshot.docs.map((doc) => {

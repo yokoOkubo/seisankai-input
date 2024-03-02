@@ -93,7 +93,7 @@ const GyoujiInput = () => {
           タイトル
           <br />
           <input
-            className="title2"
+            className="title"
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}

@@ -1,5 +1,4 @@
 import './App.scss';
-import { useState } from 'react';
 import Sidebar from './components/side/Sidebar';
 import { Outlet } from 'react-router-dom';
 

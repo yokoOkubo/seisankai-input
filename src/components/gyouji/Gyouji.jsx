@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import './Gyouji.scss';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '../../firebase';
 
 const Gyouji = () => {
   const [gyoujis, setGyoujis] = useState([]);
 
   useEffect(() => {
-    const events = collection(db, 'gyouji');
+    const ref = collection(db, 'gyouji');
+    const events = query(ref, orderBy('day1'));
     onSnapshot(events, (snapshot) => {
       setGyoujis(
         snapshot.docs.map((doc) => {
