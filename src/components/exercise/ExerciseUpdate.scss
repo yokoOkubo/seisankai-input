@@ -1,17 +1,17 @@
-.gyoujiInput {
+.exerciseUpdate {
   padding: 10px 0 0 10px;
   .contents {
     width: 700px;
     height: 300px;
   }
-  .title {
+  .place {
+    width:700px;
+  }
+  .date {
     width:700px;
   }
   .btn {
     width: 200px;
     margin: 20px;
-  }
-  .deletebtn {
-    margin: 20px;
-  }
+  }  
 }

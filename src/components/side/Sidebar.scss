@@ -1,9 +1,12 @@
 .sidebar {
         // width: 250px;
         flex: 20%;
-        height: 100%;
-        background-color: #3b627a;
+        min-height: 100%;
+        background-color: rgb(140, 150, 150);
         color: white;
+        .active {
+                color: white;
+        }
         .sidebarlist {
                 // height: auto;
                 height: 100vh;

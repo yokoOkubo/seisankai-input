@@ -1,52 +1,120 @@
-import React, { useState } from 'react'
-import { Button } from '@mui/material';
+import React, { useEffect, useState } from 'react'
+import { Button, ThemeProvider, createTheme } from '@mui/material';
 import './GyoujiUpdate.scss'
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
+import { useNavigate, useParams } from 'react-router-dom';
+import { DatePicker, LocalizationProvider, jaJP } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
+class DateAdapter extends AdapterDateFns {
+  // 参考サイトの実装例よりも、端折っているが、日曜始まりが固定なら以下で十分。
+  getWeekdays = () => ['日', '月', '火', '水', '木', '金', '土'];
+}
 
 const GyoujiUpdate = (props) => {
-  const { gyouji, setToUpdateFlg } = props;
+  const {id} = useParams(); //const params = useParams();params.idと同じ
+  
+  const navigate = useNavigate();
+  
+  const [title, setTitle] = useState("");
+  const [contents, setContents] = useState("");
+  const [day1, setDay1] = useState('');
+  const [day2, setDay2] = useState('');
 
-  const [title1, setTitle1] = useState(gyouji.title1);
-  const [title2, setTitle2] = useState(gyouji.title2);
-  const [contents, setContents] = useState(gyouji.contents);
+  const theme = createTheme(
+    {},
+    jaJP // x-date-pickers translations
+  );
+
+  useEffect(() => {
+    //useEffect内で非同期処理を行う場合にはuseEffectの引数の関数を非同期にすることはできないため、非同期の別の関数を作る
+    const fetchData = async () => {
+      const docRef = doc(db, 'gyouji', id);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        //Firebaseのtimestamp型をtoDate()で変換しnew Dateの引数とする
+        //DatePickerのvalueに指定するものはDateオブジェクトであるため
+        setDay1(new Date(docSnap.data().day1.toDate()));
+        if (docSnap.data().day2) {
+          setDay2(new Date(docSnap.data().day2.toDate()));
+        }
+        setTitle(docSnap.data().title);
+        setContents(docSnap.data().contents);
+        console.log(docSnap.data());
+      } else {
+        console.log("no such document");
+      }
+    };
+    fetchData();
+  }, []);
 
   const updateGyouji = async () => {
     const docData = {
-      title1: title1,
-      title2: title2,
+      day1: day1,
+      day2: day2,
+      title: title,
       contents: contents,
     };
-    await setDoc(doc(db, 'gyouji', gyouji.id), docData);
-    setToUpdateFlg(false);
-    alert("falseにした");
+    await setDoc(doc(db, 'gyouji', id), docData);
+    navigate('/');
   };
 
+
   const cancelUpdate = () => {
-    setToUpdateFlg(false);
+    navigate("/");
   }
+
   return (
     <div className="gyoujiUpdate">
       <h2>変更したい部分を変更してください</h2>
-      {/* <form>
+      <form>
         <div>
-          日付
+          行事が行われる日付
           <br />
-          <input
-            className="title1"
-            type="text"
-            value={title1}
-            onChange={(e) => setTitle1(e.target.value)}
-          />
+          <ThemeProvider theme={theme}>
+            <LocalizationProvider
+              dateAdapter={DateAdapter}
+              dateFormats={{ monthAndYear: 'yyyy年 MM月', monthShort: 'MM月' }}
+            >
+              <DatePicker
+                value={day1}
+                onChange={(newValue) => setDay1(newValue)}
+              />
+            </LocalizationProvider>
+          </ThemeProvider>
         </div>
+
+        <div>
+          1日で終わらない場合には最終日
+          <br />
+          <LocalizationProvider
+            dateAdapter={DateAdapter}
+            dateFormats={{ monthAndYear: 'yyyy年 MM月', monthShort: 'MM月' }}
+          >
+            <DatePicker
+              value={day2}
+              onChange={(newValue) => setDay2(newValue)}
+            />
+          </LocalizationProvider>
+          <Button
+            variant="contained"
+            onClick={(e) => setDay2("")}
+            className="deletebtn"
+          >
+            最終日は削除
+          </Button>
+        </div>
+
         <div>
           タイトル
           <br />
           <input
-            className="title2"
+            className="title"
             type="text"
-            value={title2}
-            onChange={(e) => setTitle2(e.target.value)}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
         </div>
         <div>
@@ -66,7 +134,7 @@ const GyoujiUpdate = (props) => {
             キャンセル
           </Button>
         </div>
-      </form> */}
+      </form>
     </div>
   );
 

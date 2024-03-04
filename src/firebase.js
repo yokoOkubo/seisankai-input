@@ -4,7 +4,7 @@ import { getFirestore } from 'firebase/firestore';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCqTQZVw_sGgIw4TMXnS-eMJCTO9fOOn88',
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: 'seisankai.firebaseapp.com',
   projectId: 'seisankai',
   storageBucket: 'seisankai.appspot.com',

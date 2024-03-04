@@ -1,13 +1,14 @@
-.gyoujiList {
+.exerciseList {
   margin: 0 auto;
   width: 800px;
   padding: 10px;
-  
-  .gyoujiTable { 
+  .exerciseTable {
+
     th, td {
       border: 1px solid black;
       background-color: beige;
       padding: 10px;
+      margin: 0px;
     }
   }
 }
