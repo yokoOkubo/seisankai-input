@@ -1,19 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { Button } from '@mui/material';
 import './JoinUpdate.scss'
+import '../../App.scss';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '../../firebase';
+import { auth, db } from '../../firebase';
 import { useNavigate, useParams } from 'react-router-dom';
+import Sidebar from '../side/Sidebar';
 
 
 const JoinUpdate = (props) => {
-  const {id} = useParams(); //const params = useParams();params.idと同じ
-  
+  //ログインしていないならログイン画面へ
   const navigate = useNavigate();
-  
-  const [title, setTitle] = useState("");
-  const [contents, setContents] = useState("");
-  const [created, setCreated] = useState("");
+  useEffect(() => {
+    if (auth.currentUser == null) {
+      navigate('/');
+    }
+  }, [navigate]);
+
+  const { id } = useParams(); //const params = useParams();params.idと同じ
+
+  const [title, setTitle] = useState('');
+  const [contents, setContents] = useState('');
+  const [created, setCreated] = useState('');
 
   useEffect(() => {
     //useEffect内で非同期処理を行う場合にはuseEffectの引数の関数を非同期にすることはできないため、非同期の別の関数を作る
@@ -27,7 +35,7 @@ const JoinUpdate = (props) => {
         setCreated(docSnap.data().created);
         console.log(docSnap.data());
       } else {
-        console.log("no such document");
+        console.log('no such document');
       }
     };
     fetchData();
@@ -43,46 +51,50 @@ const JoinUpdate = (props) => {
     navigate('/joinList');
   };
 
-
   const cancelUpdate = () => {
-    navigate("/joinList");
-  }
+    navigate('/joinList');
+  };
 
   return (
-    <div className="gyoujiUpdate">
-      <h2>変更したい部分を書き換えてください</h2>
-      <form>
-         <div>
-          タイトル
-          <br />
-          <input
-            className="title"
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+    <div className="App">
+      <Sidebar />
+      <div className="main">
+  
+        <div className="gyoujiUpdate">
+          <h2>変更したい部分を書き換えてください</h2>
+          <form>
+            <div>
+              タイトル
+              <br />
+              <input
+                className="title"
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+            <div>
+              内容
+              <br />
+              <textarea
+                className="contents"
+                value={contents}
+                onChange={(e) => setContents(e.target.value)}
+              />
+            </div>
+            <div>
+              <Button variant="contained" onClick={updateJoin} className="btn">
+                変更
+              </Button>
+              <Button variant="contained" onClick={cancelUpdate} className="btn">
+                キャンセル
+              </Button>
+            </div>
+          </form>
         </div>
-        <div>
-          内容
-          <br />
-          <textarea
-            className="contents"
-            value={contents}
-            onChange={(e) => setContents(e.target.value)}
-          />
-        </div>
-        <div>
-          <Button variant="contained" onClick={updateJoin} className="btn">
-            変更
-          </Button>
-          <Button variant="contained" onClick={cancelUpdate} className="btn">
-            キャンセル
-          </Button>
-        </div>
-      </form>
+      </div>
     </div>
   );
-
 }
 
 export default JoinUpdate

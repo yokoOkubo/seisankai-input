@@ -1,9 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import './Gyouji.scss';
+import '../../App.scss';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
-import { db } from '../../firebase';
+import { auth, db } from '../../firebase';
+import { useNavigate } from 'react-router-dom';
+import Sidebar from '../side/Sidebar';
 
 const Gyouji = () => {
+  //ログインしていないならログイン画面へ
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (auth.currentUser == null) {
+      navigate('/');
+    }
+  }, [navigate]);
+
   const [gyoujis, setGyoujis] = useState([]);
 
   useEffect(() => {
@@ -45,17 +56,22 @@ const Gyouji = () => {
   };
 
   return (
-    <div className="gyouji">
-      西三会行事
-      {gyoujis.map((gyouji) => {
-        return (
-          <div className="one">
-            <h2>{gyouji.title}</h2>
-            <div>日時：{toDisplayDateString(gyouji.day1, gyouji.day2)}</div>
-            <div>内容：{gyouji.contents}</div>
-          </div>
-        );
-      })}
+    <div className="App">
+      <Sidebar />
+      <div className="main">
+        <div className="gyouji">
+          西三会行事
+          {gyoujis.map((gyouji) => {
+            return (
+              <div className="one">
+                <h2>{gyouji.title}</h2>
+                <div>日時：{toDisplayDateString(gyouji.day1, gyouji.day2)}</div>
+                <div>内容：{gyouji.contents}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }

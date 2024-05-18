@@ -1,75 +1,90 @@
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
-import { db } from '../../firebase';
+import { auth, db } from '../../firebase';
 import { Button } from '@mui/material';
 import "./NewspaperUpdate.scss"
+import '../../App.scss';
+import Sidebar from '../side/Sidebar';
+
 
 const NewspaperUpdate = (props) => {
-  const {id} = useParams();
+  //ログインしていないならログイン画面へ
   const navigate = useNavigate();
+  useEffect(() => {
+    if (auth.currentUser == null) {
+      navigate('/');
+    }
+  }, [navigate]);
 
-  const [title, setTitle] = useState("");
-  const [url, setUrl] = useState("");
+  const { id } = useParams();
 
-  useEffect(()=>{
-    const fetchData = async() => {
-      const ref = doc(db, "dayori", id);
+  const [title, setTitle] = useState('');
+  const [url, setUrl] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const ref = doc(db, 'dayori', id);
       const snap = await getDoc(ref);
 
-      if(snap.exists()) {
+      if (snap.exists()) {
         setTitle(snap.data().title);
         setUrl(snap.data().url);
       } else {
-        console.log("no such document");
+        console.log('no such document');
       }
-    }
+    };
     fetchData();
-  },[]);
-  const updateData = async() => {
+  }, []);
+  const updateData = async () => {
     const docData = {
       title: title,
       url: url,
     };
     await setDoc(doc(db, 'dayori', id), docData);
-    navigate("/newspaperList");
-  }
+    navigate('/newspaperList');
+  };
   const cancelData = () => {
-    navigate("/newspaperList");
-  }
+    navigate('/newspaperList');
+  };
   return (
-    <div className="newspaperUpdate">
-      <h2>変更したい項目のみ書き換えてください</h2>
-      <form>
-        <div>
-          年月をyyyymmの形式で（たとえば2024年2月なら202402として入力）
-          <br />
-          <input
-            className="title"
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+    <div className="App">
+      <Sidebar />
+      <div className="main">
+        <div className="newspaperUpdate">
+          <h2>変更したい項目のみ書き換えてください</h2>
+          <form>
+            <div>
+              年月をyyyymmの形式で（たとえば2024年2月なら202402として入力）
+              <br />
+              <input
+                className="title"
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+            <div>
+              URL（Google Driveのdayoriフォルダに保存したPDFファイルのURL）
+              <br />
+              <input
+                className="filename"
+                type="text"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+              />
+            </div>
+            <div>
+              <Button variant="contained" onClick={updateData} className="btn">
+                変更
+              </Button>
+              <Button variant="contained" onClick={cancelData} className="btn">
+                キャンセル
+              </Button>{' '}
+            </div>
+          </form>
         </div>
-        <div>
-          URL（Google Driveのdayoriフォルダに保存したPDFファイルのURL）
-          <br />
-          <input
-            className="filename"
-            type="text"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-          />
-        </div>
-        <div>
-          <Button variant="contained" onClick={updateData} className="btn">
-            変更
-          </Button>
-          <Button variant="contained" onClick={cancelData} className="btn">
-            キャンセル
-          </Button>{' '}
-        </div>
-      </form>
+      </div>
     </div>
   );
 }

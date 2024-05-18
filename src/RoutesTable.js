@@ -17,11 +17,15 @@ import Newspaper from './components/newspaper/Newspaper';
 import NewspaperInput from './components/newspaper/NewspaperInput';
 import NewspaperList from './components/newspaper/NewspaperList';
 import NewspaperUpdate from './components/newspaper/NewspaperUpdate';
+import Login from './components/login/Login';
+import ChangePassword from './components/login/ChangePassword';
 
 const RoutesTable = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route path="" element={<GyoujiList />} />
+      <Route path="" element={<Login />} />
+      <Route path="changePassword" element={<ChangePassword />} />
+      <Route path="gyoujiList" element={<GyoujiList />} />
       <Route path="gyouji" element={<Gyouji />} />
       <Route path="gyoujiInput" element={<GyoujiInput />} />
       <Route path="gyoujiUpdate/:id" element={<GyoujiUpdate />} />

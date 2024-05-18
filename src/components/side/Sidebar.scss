@@ -4,6 +4,10 @@
         min-height: 100%;
         background-color: rgb(140, 150, 150);
         color: white;
+        .button {
+                text-align: center;
+                margin-top: 10px;
+        }
         .active {
                 color: white;
         }
